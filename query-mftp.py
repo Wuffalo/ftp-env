@@ -7,7 +7,7 @@ Created on Fri Mar 29 21:59:28 2019
 
 import pandas as pd
 
-path_to_FTP = 'C:/Users/c05wmi1/Documents/Python Scripts/Master_FTP.csv'
+path_to_FTP = 'C:/Users/WMINSKEY/Output/Master_FTP.csv'
 MFTP = pd.read_csv(path_to_FTP)
 
 # MFTP.loc[:, ~MFTP.columns.str.contains('^Unnamed')] delete all empty columns, column name start with Unnamed
