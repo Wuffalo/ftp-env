@@ -1,53 +1,50 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Mar 29 21:59:28 2019
-
-@author: c05wmi1
+2019
+@author: wuffalo
 """
 
 import pandas as pd
 
-path_to_FTP = 'C:/Users/WMINSKEY/Output/Master_FTP.csv'
-MFTP = pd.read_csv(path_to_FTP)
+path_to_excel = "/mnt/c/Users/WMINSKEY/Output/Master_FTP.csv"
 
-# MFTP.loc[:, ~MFTP.columns.str.contains('^Unnamed')] delete all empty columns, column name start with Unnamed
+df = pd.read_csv(path_to_excel, parse_dates=[7,8], infer_datetime_format=True)
 
+#drop extra columns
+df.drop(df.iloc[:,16:], inplace=True, axis=1)
 
-# =============================================================================
-# def OpenMasterFTP():
-#     MFTP = pd.read_csv(path_to_FTP)
-#     return MFTP
-# =============================================================================
+#creates SO-SS column by combining sales order and ship set
+df['SO-SS'] = df['Sales_Order'].astype(str) + '-' + df['Ship_Set'].astype(str)
 
-# =============================================================================
-# def QueryPalletID(PalletID):
-#     qPallet =   """
-#                 SELECT Pallet_ID, Carton_ID, Weight
-#                 FROM MFTP
-#                 WHERE MFTP.Pallet_ID = PalletID
-#                 """
-#     return pdsql.pysqldf(qPallet)
-# =============================================================================
+#delete where multiple headers
+df.drop(df[df.Carton_ID == "Carton_ID"].index, inplace=True)
 
-## Ask user which input they want to provide and record it
+x = 1
 
-query = input("Enter your query input for the Master FTP file\n"
-              "1 - PalletID\n"
-              "2 - Carton ID\n"
-              "3 - SO-SS\n"
-              "> ")
-print("You have selected: ", query)
+while x == 1:
+    query = input("Enter your query input for the Master FTP file\n"
+                "1 - PalletID\n"
+                "2 - Carton ID\n"
+                "3 - SO-SS\n"
+                "4 - SQL Query\n"
+                "5 - exit program"
+                "> ")
+    print("You have selected: ", query)
 
-if query == "1":
-    PalletID = input("Enter in your Pallet ID: ")
-    print("You entered the pallet ID of: ", PalletID)
-    print(MFTP.query('Pallet_ID == PalletID', inplace = True))
-elif query == "2":
-    CartonID = input("Enter in your carton ID (CID): ")
-    print("You entered CID: ", CartonID)
-elif query =="3":
-    SOSS = input("Enter in your SO-SS: ")
-    print("You entered in the SO-SS: ", SOSS)
-
-foo = MFTP.loc[df['Pallet_ID']==PalletID]
-foo = df.ix[(df['column1']==value) | (df['columns2'] == 'b') | (df['column3'] == 'c')]
+    if query == "1":
+        PalletID = input("Enter in your Pallet ID: ")
+        print("You entered the pallet ID of: ", PalletID)
+        PLout = df['Pallet_ID'] == PalletID
+        print(df[PLout])
+    elif query == "2":
+        CartonID = int(input("Enter in your carton ID (CID): "))
+        print("You entered CID: ", CartonID)
+        CIDout = df['Carton_ID'] == CartonID
+        print(df[CIDout])
+    elif query =="3":
+        SOSS = input("Enter in your SO-SS: ")
+        print("You entered in the SO-SS: ", SOSS)
+        SOSSout = df['SO-SS'] == SOSS
+        print(df[SOSSout])
+    elif query =="5":
+        break
