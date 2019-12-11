@@ -8,7 +8,7 @@ Created on Sat Dec  1 14:30:25 2018
 import pandas as pd
 import os
 
-path_to_FTP = "S:/05 - Office/FTP/FTP Files/"
+path_to_FTP = "/mnt/shared-drive/05 - Office/FTP/FTP Files/"
 
 def GetHumanReadable(size,precision=2):
     suffixes=['B','KB','MB','GB','TB']
@@ -18,18 +18,20 @@ def GetHumanReadable(size,precision=2):
         size = size/1024.0 #apply the division
     return "%.*f%s"%(precision,size,suffixes[suffixIndex])
 
-full_list = []
+file_list = []
 
+# walk file directory and create list of files
 for subdir, dirs, files in os.walk(path_to_FTP):
     for file in files:
         filepath = subdir + os.sep + file
         if filepath.endswith(".csv"):
-            if filepath not in full_list:
-                full_list.append(filepath)
-                
+            if filepath not in file_list:
+                file_list.append(filepath)
+
 df_list = []
-    
-for f in full_list:
+
+# for each file name, grab file, format and append to list of dataframes
+for f in file_list:
     sheet = pd.read_csv(f, error_bad_lines=False)
     f_source = os.path.basename(f).strip('.csv')
     sheet["FTPday"] = f_source
