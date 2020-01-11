@@ -88,7 +88,7 @@ else:
     for i in df_out:
         j = (str(i)+'.csv')
         srv.get(j, '/mnt/c/Users/WMINSKEY/.pen/ftp-file-practice/downloaded/'+j)
-        print("Downloading "+i)
+        print("Downloading "+str(i))
     for root, subFolders, files in os.walk(srcpath):
         for file in files:
             subFolder = os.path.join(path_to_FTP, file[:4], file[4:6])
