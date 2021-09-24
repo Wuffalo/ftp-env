@@ -87,17 +87,17 @@ if df_out.empty == True:
 else:
     for i in df_out:
         j = (str(i)+'.csv')
-        srv.get(j, '/mnt/c/Users/WMINSKEY/.pen/ftp-file-practice/downloaded/'+j)
+        srv.get(j, '/mnt/c/Users/WMINSKEY/.pen/ftp-file-practice/downloaded/'+j) #ACTUALLY DOWNLOADS FILE
         print("Downloading "+str(i))
     for root, subFolders, files in os.walk(srcpath):
         for file in files:
             subFolder = os.path.join(path_to_FTP, file[:4], file[4:6])
             if not os.path.isdir(subFolder):
                 os.makedirs(subFolder)
-            # print(os.path.join(root, file))
-            # print(subFolder)
-            shutil.copyfile(os.path.join(root, file), os.path.join(subFolder, file))
-            print("Moving "+file)
+            print(os.path.join(root, file)) #
+            print(subFolder) #
+            shutil.copyfile(os.path.join(root, file), os.path.join(subFolder, file)) #ACTUALLY MOVES FILE INTO FTP FOLDER
+            print("Adding "+file)
     srv.close()
 
 [os.remove(os.path.join(srcpath, f)) for f in os.listdir(srcpath) if f.endswith(".csv")]

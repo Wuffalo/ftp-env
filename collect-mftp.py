@@ -32,7 +32,7 @@ df_list = []
 
 # for each file name, grab file, format and append to list of dataframes
 for f in file_list:
-    sheet = pd.read_csv(f, error_bad_lines=False)
+    sheet = pd.read_csv(f, error_bad_lines=False, warn_bad_lines=False)
     f_source = os.path.basename(f).strip('.csv')
     sheet["FTPday"] = f_source
     b_size = os.stat(f).st_size
@@ -41,4 +41,4 @@ for f in file_list:
 
 Master_FTP = pd.concat(df_list, ignore_index=True, sort=False)
 
-Master_FTP.to_csv('C:/Users/WMINSKEY/Output/Master_FTP.csv',index=False)
+Master_FTP.to_csv('/mnt/c/Users/WMINSKEY/Output/Master_FTP.csv',index=False)

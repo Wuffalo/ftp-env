@@ -112,11 +112,11 @@ for i in remote_list:
     k = j+'.csv'
     year = j[:4]
     month = j[4:6]
-    sheet_local = pd.read_csv(os.path.join("/mnt/shared-drive/05 - Office/FTP/FTP Files/",year,month,k), error_bad_lines=False)
+    sheet_local = pd.read_csv(os.path.join("/mnt/shared-drive/05 - Office/FTP/FTP Files/",year,month,k), error_bad_lines=False, warn_bad_lines=False)
     # print(j)
     local_index = len(sheet_local.index)
     srv.get(k, '/mnt/c/Users/WMINSKEY/.pen/ftp-file-practice/downloaded/'+k)
-    sheet_remote = pd.read_csv("/mnt/c/Users/WMINSKEY/.pen/ftp-file-practice/downloaded/"+k, error_bad_lines=False)
+    sheet_remote = pd.read_csv("/mnt/c/Users/WMINSKEY/.pen/ftp-file-practice/downloaded/"+k, error_bad_lines=False, warn_bad_lines=False)
     remote_index = len(sheet_remote.index)
     if remote_index > local_index:
         # print(j)
@@ -132,8 +132,13 @@ for i in remote_list:
 
 srv.close()
 
-print(files_to_update)
-print(len(files_to_update))
+# print(files_to_update)
+print("# of files needing overwrite: "+str(len(files_to_update)))
+if 0 < len(files_to_update) < 10:
+    print(files_to_update)
+
+if len(files_to_update) >= 10:
+    print("Multiple files require replacement. (10+)")
 
 # challenge = 1
 
@@ -168,7 +173,7 @@ print(len(files_to_update))
 #     elif query == "4":
 #         break
 
-# remove following block of code to write over for bigger remote files
+### remove following block of code to write over for bigger remote files. Action of code. ###
 # for i in files_to_update:
 #     j = str(i)
 #     k = j+'.csv'
@@ -176,8 +181,11 @@ print(len(files_to_update))
 #     month = j[4:6]
 #     origin = '/mnt/c/Users/WMINSKEY/.pen/ftp-file-practice/downloaded/'+k
 #     destination = os.path.join("/mnt/shared-drive/05 - Office/FTP/FTP Files/",year,month,k)
-#     shutil.copyfile(origin, destination)
-
+#     try:
+#         shutil.copyfile(origin, destination)
+#         print("Moved and replaced "+k)
+#     except:
+#         print("Failed to move and replace "+k)
 
 [os.remove(os.path.join(srcpath, f)) for f in os.listdir(srcpath) if f.endswith(".csv")]
 # for f in os.listdir(srcpath): if f.endswith(".csv"): os.remove(f)
